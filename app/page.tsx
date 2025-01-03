@@ -1,101 +1,311 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+// app/page.tsx
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Save, RefreshCcw, Building2, Calendar, DollarSign, Percent } from 'lucide-react';
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+interface FormData {
+    mainHeading: string;
+    totalPlay: string;
+    oldBalance: string;
+    selectedOption: string;
+    ankValue: string;
+    spValue: string;
+    dpValue: string;
+    jodiValue: string;
+    totalPlaySelect: string;
+    oldBalanceSelect: string;
+    advanceMoneySelect: string;
+    ankValueSelect: string;
+    spValueSelect: string;
+    dpValueSelect: string;
+    jodiValueSelect: string;
+    selectedDate: string;
+    advanceMoney: string;
+}
+
+interface InputGroupProps {
+    label: string;
+    name: string;
+    type: string;
+    value: string;
+    selectName?: string;
+    selectValue?: string;
+    selectOptions?: Array<{ value: string; label: string }>;
+    icon?: any;
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+}
+
+const InputGroup = ({
+                        label,
+                        name,
+                        type,
+                        value,
+                        selectName,
+                        selectValue,
+                        selectOptions,
+                        icon: Icon,
+                        onChange
+                    }: InputGroupProps) => (
+    <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="flex items-center gap-2 mb-1">
+                {Icon && <Icon className="w-4 h-4" />}
+                {label}
+            </div>
+        </label>
+        <div className="flex gap-2">
+            <input
+                type={type}
+                name={name}
+                value={value}
+                onChange={onChange}
+                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            {selectOptions && (
+                <select
+                    name={selectName}
+                    value={selectValue}
+                    onChange={onChange}
+                    className="rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                >
+                    <option value="">Select</option>
+                    {selectOptions.map(option => (
+                        <option key={option.value} value={option.value}>
+                            {option.label}
+                        </option>
+                    ))}
+                </select>
+            )}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
-  );
+);
+
+export default function HomePage() {
+    const router = useRouter();
+    const [formData, setFormData] = useState<FormData>({
+        mainHeading: '',
+        totalPlay: '',
+        oldBalance: '',
+        selectedOption: '',
+        ankValue: '',
+        spValue: '',
+        dpValue: '',
+        jodiValue: '',
+        totalPlaySelect: '',
+        oldBalanceSelect: '',
+        advanceMoneySelect: '',
+        ankValueSelect: '',
+        spValueSelect: '',
+        dpValueSelect: '',
+        jodiValueSelect: '',
+        selectedDate: '',
+        advanceMoney: ''
+    });
+
+    useEffect(() => {
+        const savedFormData = localStorage.getItem('formData');
+        if (savedFormData) {
+            setFormData(JSON.parse(savedFormData));
+        }
+    }, []);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        localStorage.setItem('formData', JSON.stringify(formData));
+        router.push('/result');
+    };
+
+    const handleReset = () => {
+        localStorage.removeItem('formData');
+        setFormData({
+            mainHeading: '',
+            totalPlay: '',
+            oldBalance: '',
+            selectedOption: '',
+            ankValue: '',
+            spValue: '',
+            dpValue: '',
+            jodiValue: '',
+            totalPlaySelect: '',
+            selectedDate: '',
+            oldBalanceSelect: '',
+            advanceMoneySelect: '',
+            ankValueSelect: '',
+            spValueSelect: '',
+            dpValueSelect: '',
+            jodiValueSelect: '',
+            advanceMoney: ''
+        });
+    };
+
+    return (
+        <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+                <div className="px-6 py-8">
+                    <div className="flex justify-between items-center mb-8">
+                        <h1 className="text-2xl font-bold text-gray-900">
+                            Generate Slip
+                        </h1>
+                        <button
+                            type="button"
+                            onClick={handleReset}
+                            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                        >
+                            <RefreshCcw className="w-4 h-4"/>
+                            Reset
+                        </button>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <InputGroup
+                            label="Company"
+                            name="mainHeading"
+                            type="text"
+                            value={formData.mainHeading}
+                            icon={Building2}
+                            onChange={handleChange}
+                        />
+
+                        <InputGroup
+                            label="Select Date"
+                            name="selectedDate"
+                            type="date"
+                            value={formData.selectedDate}
+                            icon={Calendar}
+                            onChange={handleChange}
+                        />
+
+                        <InputGroup
+                            label="Total Play"
+                            name="totalPlay"
+                            type="number"
+                            value={formData.totalPlay}
+                            selectName="totalPlaySelect"
+                            selectValue={formData.totalPlaySelect}
+                            selectOptions={[
+                                {value: '0', label: '0%'},
+                                {value: '5', label: '5%'},
+                                {value: '4', label: '4%'},
+                                {value: '8', label: '8%'},
+                                {value: '10', label: '10%'}
+                            ]}
+                            icon={DollarSign}
+                            onChange={handleChange}
+                        />
+
+                        <InputGroup
+                            label="Old Balance"
+                            name="oldBalance"
+                            type="number"
+                            value={formData.oldBalance}
+                            selectName="oldBalanceSelect"
+                            selectValue={formData.oldBalanceSelect}
+                            selectOptions={[
+                                {value: '1', label: 'Balance Plus'},
+                                {value: '0', label: 'Balance Minus'}
+                            ]}
+                            icon={DollarSign}
+                            onChange={handleChange}
+                        />
+
+                        <InputGroup
+                            label="Advance Money"
+                            name="advanceMoney"
+                            type="number"
+                            value={formData.advanceMoney}
+                            selectName="advanceMoneySelect"
+                            selectValue={formData.advanceMoneySelect}
+                            selectOptions={[
+                                {value: '1', label: 'Advance Plus'},
+                                {value: '0', label: 'Advance Minus'}
+                            ]}
+                            icon={DollarSign}
+                            onChange={handleChange}
+                        />
+
+                        <div className="border-t border-gray-200 my-8"></div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <InputGroup
+                                label="Ank"
+                                name="ankValue"
+                                type="number"
+                                value={formData.ankValue}
+                                selectName="ankValueSelect"
+                                selectValue={formData.ankValueSelect}
+                                selectOptions={[
+                                    {value: '9', label: '9%'},
+                                    {value: '9.5', label: '9.5%'}
+                                ]}
+                                icon={Percent}
+                                onChange={handleChange}
+                            />
+
+                            <InputGroup
+                                label="SP"
+                                name="spValue"
+                                type="number"
+                                value={formData.spValue}
+                                selectName="spValueSelect"
+                                selectValue={formData.spValueSelect}
+                                selectOptions={[
+                                    {value: '140', label: '140'},
+                                    {value: '150', label: '150'}
+                                ]}
+                                onChange={handleChange}
+                            />
+
+                            <InputGroup
+                                label="DP"
+                                name="dpValue"
+                                type="number"
+                                value={formData.dpValue}
+                                selectName="dpValueSelect"
+                                selectValue={formData.dpValueSelect}
+                                selectOptions={[
+                                    {value: '280', label: '280'},
+                                    {value: '300', label: '300'}
+                                ]}
+                                onChange={handleChange}
+                            />
+
+                            <InputGroup
+                                label="Jodi"
+                                name="jodiValue"
+                                type="number"
+                                value={formData.jodiValue}
+                                selectName="jodiValueSelect"
+                                selectValue={formData.jodiValueSelect}
+                                selectOptions={[
+                                    {value: '90', label: '90'},
+                                    {value: '95', label: '95'}
+                                ]}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className="flex justify-end mt-8">
+                            <button
+                                type="submit"
+                                className="flex items-center gap-2 px-6 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                            >
+                                <Save className="w-4 h-4"/>
+                                Generate Slip
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    );
 }
